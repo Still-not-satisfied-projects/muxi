@@ -2,7 +2,6 @@
 ===
 
 	a python web framework baseon werkzeug~jinja~mana
-
 	yes, it's on the top of flask
 
 ## GET Muxi
@@ -38,7 +37,17 @@ now, you can run your muxi app
 this muxi app running on http://127.0.0.1:4399/muxi
 
 ## font-end template
-muxi use jinja as font-end template
+muxi use jinja as font-end template <br/>
+you can write your views functions in app/views.py
+
+	from . import app
+
+	@app.views("muxi.html")
+	@app.route("/muxi/name")
+	def muxi(name):
+		name = "neo1218"
+		return {name = name}
+
 
 ## SQL ORM
 muxi use sqlalchemy as SQL ORM. <br/>
