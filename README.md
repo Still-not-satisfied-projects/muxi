@@ -9,7 +9,7 @@
 	pip install muxi
 
 ## First Muxi App
-First, you need to go to terminal, and use mana to init muxi project!
+at First, you need to go to terminal, and use mana to init muxi project!
 
 	$ mana init MuxiExample
 
@@ -43,7 +43,7 @@ you can write your views functions in app/views.py
 	from . import app
 
 	@app.views("muxi.html")
-	@app.route("/muxi/name")
+	@app.url("/muxi/name")
 	def muxi(name):
 		name = "neo1218"
 		return {name = name}
