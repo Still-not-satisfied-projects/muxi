@@ -15,7 +15,7 @@
 from basedir import _basedir
 
 # werkzeug
-from werkzeug import Request
+from werkzeug.wrappers import Request
 
 # jinja
 
