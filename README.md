@@ -9,7 +9,7 @@ Muxi
 
 	pip install muxi
 
-## So... Muxi
+## First Muxi App
 First, you need to go to terminal, and use mana to init muxi project!
 
 	$ mana init MuxiExample
@@ -36,3 +36,35 @@ now, you can run your muxi app
 	$ python manage.py runserver
 
 this muxi app running on http://127.0.0.1:4399/muxi
+
+## font-end template
+muxi use jinja as font-end template
+
+## SQL ORM
+muxi use sqlalchemy as SQL ORM. <br/>
+what you need todo is create 'models.py' and coding
+
+	from muxi import db
+
+	class User(db.Model):
+		coding...
+
+## DataBase
+create migration floder to record database migrate
+
+	python manage.py db init
+
+create database and first migrate
+
+	python manage.py db migrate -m "some note"
+
+update database
+
+	python manage.py db upgrade
+
+teardown database
+
+	config this option:
+	app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+
+	and the database would be automatically teardown when sth oops...
