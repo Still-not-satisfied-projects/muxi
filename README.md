@@ -10,7 +10,7 @@ Muxi
 	pip install muxi
 
 ## So... Muxi
-First, you need to go to terminal, and use mana to init water project!
+First, you need to go to terminal, and use mana to init muxi project!
 
 	$ mana init MuxiExample
 
