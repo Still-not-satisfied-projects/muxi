@@ -12,6 +12,7 @@
 
 # models import
 # basic models
+from basedir import _basedir
 
 # werkzeug
 from werkzeug import Request
