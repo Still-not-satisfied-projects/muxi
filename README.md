@@ -84,3 +84,5 @@ teardown database
 	The original meaning of 木犀(muxi) is {{ a sweet-scented osmanthus }} and
 	used as my :team name ~ MuxiStudio:
 	beacause I love my team, so I chose muxi as this simple web framework's name
+
+![muxi](http://7xj431.com1.z0.glb.clouddn.com/slogan_bg.png)
