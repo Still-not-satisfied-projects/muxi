@@ -77,3 +77,10 @@ teardown database
 	app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 	and the database would be automatically teardown when sth oops...
+
+
+### :About Name:
+
+	The original meaning of 木犀(muxi) is {{ a sweet-scented osmanthus }} and
+	used as my :team name ~ MuxiStudio:
+	beacause I love my team, so I chose muxi as this simple web framework's name
