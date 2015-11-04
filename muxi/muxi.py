@@ -135,6 +135,22 @@ def get_show_msg():
 		_request_ctx_stack.top.shows = shows = session.pop('_shows', [])
 
 
+def views(template):
+	"""
+	:decorator views:
+	:ex:
+		@views("muxi.html")
+		@app.route("/muxi")
+		def muxi(name):
+			name = "muxi"
+			return {name:name}
+	"""
+	def _views(view_func):
+		def __views(*args, **kwargs):
+			context = view_func(*args, **kwargs)
+			return current_app.jinja_env.get_template(template).render(context)
+
+
 class Muxi(object):
 	"""
 	The :class~Muxi: obj implements a WSGI application and
