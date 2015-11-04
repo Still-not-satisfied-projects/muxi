@@ -34,7 +34,7 @@ now, you can run your muxi app
 	$ mana manage MuxiExample
 	$ python manage.py runserver
 
-this muxi app running on http://127.0.0.1:4399/muxi
+this muxi app running on http://127.0.0.1:304/muxi
 
 ## font-end template
 muxi use jinja as font-end template <br/>
