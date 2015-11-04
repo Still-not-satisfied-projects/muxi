@@ -21,6 +21,17 @@ from werkzeug.wrappers import Request, Response
 
 # mana
 
+# try to import the json helpers
+# simplejson is more efficient than json, so
+# we first want import simplejson, except ImportError...
+try:
+	from simplejson import loads as load_json, dumps as dump_json
+except ImportError:
+	try:
+		from json import loads as load_json, dumps as dump_json
+	except ImportError:
+		pass
+
 # models not used in this file but are exported as public interface
 
 
@@ -96,6 +107,32 @@ def gen_url(endpoint, **values):
 	#  ...-->  '/?q=I&q=love&q=muxi'
 
 	return _request_ctx_stack.top.url_adapter.build(endpoint, values)
+
+
+def jsonified(**values):
+	"""return a json response"""
+	return current_app.response_class(
+		dump_json(values),
+		mimetype = "text/html"
+	)
+
+
+def show(message):
+	"""show a message to the next request"""
+	session['_flashes'] = session.get('_shows', []) + [message]
+# well ~
+# :func show: means show, but it actually "push" the message into session
+# and we can use :func get_show_msg: in template to "pop" the message and
+# what's more: remove them!
+# here we go ~
+def get_show_msg():
+	"""
+	:func get_show_msg: can pop the message to show in
+	next request
+	"""
+	shows = _request_ctx_stack.top.shows
+	if shows is None:
+		_request_ctx_stack.top.shows = shows = session.pop('_shows', [])
 
 
 class Muxi(object):
