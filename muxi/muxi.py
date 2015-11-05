@@ -16,9 +16,11 @@ from basedir import _basedir
 
 # werkzeug
 from werkzeug.wrappers import Request, Response
+from werkzeug.routing import Map, Rule
 from werkzeug import LocalStack, LocalProxy
 
 # jinja
+from jinja2 import Environment, PackageLoader
 
 # mana
 
@@ -157,6 +159,10 @@ class Muxi(object):
 	The :class~Muxi: obj implements a WSGI application and
 	automatically config the app & register view functions through
 	the name of the module or package passed.
+	:ex:
+		from muxi import Muxi
+		app = Muxi(__name__)
+	and app is ~WSGI~application
 	"""
 
 	# the class for request obj
@@ -187,6 +193,27 @@ class Muxi(object):
 		autoescape = True,
 		extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_']
 	)
+
+	def __init__(self, package_name):
+		# app = Muxi(__name__)
+		self.debug = False
+		self.package_name = package_name
+		self.view_functions = {}
+		self.error_handlers = {}
+		self.request_init_funcs = []
+		self.request_shutdown_functions = []
+		self.url_map = Map()
+
+		if self.static_path is not None:
+			# auto add ~endpoint:static~
+			self.url_map.add(Rule(
+				self.static_path + "/<filename>",
+				build_only = True,
+				endpoint = 'static'
+			))
+
+		self.jinja_env = Environment(loader=self.create_jinja_loader(),
+				**self.jinja_options)
 
 
 
