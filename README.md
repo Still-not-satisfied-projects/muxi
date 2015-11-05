@@ -30,7 +30,7 @@ What's more, open app/views.py, and write views
 
 	from . import app
 
-	@app.url('/muxi')
+	@url(app, '/muxi')
 	def muxi():
 		return "<h1>I like muxi :) </h1>"
 
@@ -47,8 +47,8 @@ you can write your views functions in app/views.py
 
 	from . import app
 
-	@app.views("muxi.html")
-	@app.url("/muxi/name")
+	@views("muxi.html")
+	@url(app, "/muxi/name")
 	def muxi(name):
 		name = "neo1218"
 		return {name = name}
