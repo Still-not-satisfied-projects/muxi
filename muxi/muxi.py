@@ -165,9 +165,36 @@ class Muxi(object):
 	# the class for response obj
 	response_class = MuxiResponse
 
+	# static path
+	# path for the static file
+	# if we don't want use static files
+	# we can set this to None !
+	static_path = '/static'
 
-# context locals
+	# if secret_key is set, we can use this to
+	# sign cookies or some auth info
+	# follow this you can simple have a secret_key
+	#	..--> import os
+	#	..--> os.urandom(24)
+	#	'YkB\xe4\x11\xef\xa0\xe4\x9e\x8cZ\xb2}^>T\x12a\x96\x90\xcc\xfd;b'
+	# and it is better to set secret_key into environment variable
+	secret_key = None
+
+	session_cookie_name = 'session'
+
+	# options that are passed directly to the jinja environment
+	jinja_options = dict(
+		autoescape = True,
+		extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_']
+	)
+
+
+
+
+#					 context locals
 # make the ~global~ctx proxy the local~but~active ctx
+# LocalStack == Local + "stack"~pop&push
+# _request_ctx_stack.top == _request_ctx_stack._local.stack[-1]
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 _request_ctx_stack = LocalStack()							 #|
 current_app = LocalProxy(lambda: _request_ctx_stack.top.app) #|
@@ -175,4 +202,4 @@ request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
 session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
 g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# I love MuxiStudio
+#					I love MuxiStudio
