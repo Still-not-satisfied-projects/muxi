@@ -167,6 +167,7 @@ class Muxi(object):
 
 
 # context locals
+# make the ~global~ctx proxy the local~but~active ctx
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 _request_ctx_stack = LocalStack()							 #|
 current_app = LocalProxy(lambda: _request_ctx_stack.top.app) #|
@@ -174,3 +175,4 @@ request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
 session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
 g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# I love MuxiStudio
