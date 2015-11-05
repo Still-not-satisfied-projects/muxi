@@ -200,6 +200,7 @@ class Muxi(object):
 		self.package_name = package_name
 		self.view_functions = {}
 		self.error_handlers = {}
+		# the func run before request
 		self.request_init_funcs = []
 		self.request_shutdown_functions = []
 		self.url_map = Map()
@@ -259,6 +260,17 @@ class Muxi(object):
 				return f
 			return decorator
 
+		def request_init(self, f):
+			# registers a function to run before each request
+			self.request_init_funcs.append(f)
+			return f
+
+		def preprocess_request(self):
+			for func in self.request_init_funcs:
+				rv = func()
+				if rv is not None:
+					return rv
+
 		def match_request(self):
 			# match the current(active) URL according to the URL Map,
 			# and stores the endpoint and view arguments on the request obj,
@@ -281,6 +293,44 @@ class Muxi(object):
 				return e
 			except Exception, e:
 				return e
+
+		def make_response(self, rv):
+			# turn a view function's rv(return~value) to
+			# a true response object
+			if isinstance(rv, self.response_class):
+				return rv
+			if isinstance(rv, basestring):
+				return self.response_class(rv)
+			if isinstance(rv, tuple):
+				return self.response_class(*rv)
+			return self.response_class.force_type(rv, request.environ)
+
+		def process_response(self, response):
+			# not need now
+			return response
+
+		def wsgi_app(self, environ, start_response):
+			"""
+			muxi is a WSGI application
+			more detail on {WSGI}
+			[https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface]
+			"""
+			_request_ctx_stack.push(_RequestContext(self, environ))
+			try:
+				rv = self.preprocess_request()
+				if rv is None:
+					# so: rv is a func return value which
+					# run before request
+					rv = self.dispatch_request()
+				response = self.make_response(rv)
+				response = self.process_response(response)
+				return response(environ, start_response)
+			finally:
+				_request_ctx_stack.pop()
+
+		def __call__(self, environ, start_response):
+			# call for `wsgi_app`
+			return self.wsgi_app(environ, start_response)
 
 
 # context locals
