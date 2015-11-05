@@ -16,6 +16,7 @@ from basedir import _basedir
 
 # werkzeug
 from werkzeug.wrappers import Request, Response
+from werkzeug import LocalStack, LocalProxy
 
 # jinja
 
@@ -82,30 +83,30 @@ def gen_url(endpoint, **values):
 	generate a URL through the given endpoint
 	:param endpoint:  the endpoint of the url(the name of the view function)
 	:param values:  the variable arguments of the URL rule
-	"""
-	#  MapAdapter.build can build endpoint and value dict as url
-	#  follow the URL Rule
-	#
-	#  :URL build ex:
-	#  m = Map([
-	#      Rule('/', endpoint='index'),
-	#  	Rule('/downloads/', endpoint='downloads/index'),
-	#  	Rule('/downloads/<int:id>', endpoint='downloads/show')
-	#  ])
-	#
-	#  urls = m.bind("ex.com", "/")  # urls is :class~MapAdapter: obj
-	#
-	#  urls.build("index", {})
-	#  ...-->  '/'
-	#  urls.build("downloads/show", {'id':32})
-	#  ...-->  '/downloads/32'
-	#  urls.build("downloads/show", {'id':32}, force_external=True)
-	#  ...-->  'http://ex.com/downloads/32'
-	#  urls.build("index", {'q':'muxi'})
-	#  ...-->  '/?q=muxi'
-	#  urls.build("index", {'q':['I', 'love', 'muxi']})
-	#  ...-->  '/?q=I&q=love&q=muxi'
 
+	  MapAdapter.build can build endpoint and value dict as url
+	  follow the URL Rule
+
+	  :URL build ex:
+	  m = Map([
+	      Rule('/', endpoint='index'),
+	  	Rule('/downloads/', endpoint='downloads/index'),
+	  	Rule('/downloads/<int:id>', endpoint='downloads/show')
+	  ])
+
+	  urls = m.bind("ex.com", "/")  # urls is :class~MapAdapter: obj
+
+	  urls.build("index", {})
+	  ...-->  '/'
+	  urls.build("downloads/show", {'id':32})
+	  ...-->  '/downloads/32'
+	  urls.build("downloads/show", {'id':32}, force_external=True)
+	  ...-->  'http://ex.com/downloads/32'
+	  urls.build("index", {'q':'muxi'})
+	  ...-->  '/?q=muxi'
+	  urls.build("index", {'q':['I', 'love', 'muxi']})
+	  ...-->  '/?q=I&q=love&q=muxi'
+	"""
 	return _request_ctx_stack.top.url_adapter.build(endpoint, values)
 
 
@@ -163,3 +164,13 @@ class Muxi(object):
 
 	# the class for response obj
 	response_class = MuxiResponse
+
+
+# context locals
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+_request_ctx_stack = LocalStack()							 #|
+current_app = LocalProxy(lambda: _request_ctx_stack.top.app) #|
+request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
+session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
+g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
