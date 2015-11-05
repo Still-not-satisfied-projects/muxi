@@ -91,9 +91,9 @@ def gen_url(endpoint, **values):
 
 	  :URL build ex:
 	  m = Map([
-	      Rule('/', endpoint='index'),
-	  	Rule('/downloads/', endpoint='downloads/index'),
-	  	Rule('/downloads/<int:id>', endpoint='downloads/show')
+		  Rule('/', endpoint='index'),
+		Rule('/downloads/', endpoint='downloads/index'),
+		Rule('/downloads/<int:id>', endpoint='downloads/show')
 	  ])
 
 	  urls = m.bind("ex.com", "/")  # urls is :class~MapAdapter: obj
@@ -115,14 +115,14 @@ def gen_url(endpoint, **values):
 def jsonified(**values):
 	"""return a json response"""
 	return current_app.response_class(
-		dump_json(values),
-		mimetype = "text/html"
-	)
+			dump_json(values),
+			mimetype = "text/html"
+			)
 
 
-def show(message):
-	"""show a message to the next request"""
-	session['_flashes'] = session.get('_shows', []) + [message]
+	def show(message):
+		"""show a message to the next request"""
+		session['_flashes'] = session.get('_shows', []) + [message]
 # well ~
 # :func show: means show, but it actually "push" the message into session
 # and we can use :func get_show_msg: in template to "pop" the message and
@@ -190,9 +190,9 @@ class Muxi(object):
 
 	# options that are passed directly to the jinja environment
 	jinja_options = dict(
-		autoescape = True,
-		extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_']
-	)
+			autoescape = True,
+			extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_']
+			)
 
 	def __init__(self, package_name):
 		# app = Muxi(__name__)
@@ -210,15 +210,41 @@ class Muxi(object):
 				self.static_path + "/<filename>",
 				build_only = True,
 				endpoint = 'static'
-			))
+				))
 
 		self.jinja_env = Environment(loader=self.create_jinja_loader(),
 				**self.jinja_options)
 
+		self.jinja_env.globals.update(
+				url_for = url_for,
+				request = request,
+				session = session,
+				g = g,
+				get_show_msg = get_show_msg
+				)
+
+		def create_jinja_loader(self):
+			# create jinja loader
+			# which can auto find templates floder
+			return PackageLoader(self.package_name)
+
+		def run(self,	host="muxihost", port=304, **options):
+			"""
+			run muxi application~:root URL:~http://muxihost:304
+			"""
+			from werkzeug import run_simple
+			if 'debug' in options:
+				self.debug = options.pop('debug')
+			if self.static_path is not None:
+				options['static_files'] = {
+						self.static_path:(self.package_name, 'static')
+						}
+			options.setdefault('use_reloader', self.debug)
+			options.setdefault('use_debugger', self.debug)
+			return run_simple(host, port, self, **options)
 
 
-
-#					 context locals
+# context locals
 # make the ~global~ctx proxy the local~but~active ctx
 # LocalStack == Local + "stack"~pop&push
 # _request_ctx_stack.top == _request_ctx_stack._local.stack[-1]
@@ -229,4 +255,4 @@ request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
 session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
 g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#					I love MuxiStudio
+# I love MuxiStudio
