@@ -229,9 +229,7 @@ class Muxi(object):
 			return PackageLoader(self.package_name)
 
 		def run(self,	host="muxihost", port=304, **options):
-			"""
-			run muxi application~:root URL:~http://muxihost:304
-			"""
+			# run muxi application~:root URL:~http://muxihost:304
 			from werkzeug import run_simple
 			if 'debug' in options:
 				self.debug = options.pop('debug')
@@ -242,6 +240,47 @@ class Muxi(object):
 			options.setdefault('use_reloader', self.debug)
 			options.setdefault('use_debugger', self.debug)
 			return run_simple(host, port, self, **options)
+
+		@staticmethod
+		def url(rule, **options):
+			# @url:
+			# a decorator that is used to register a view function
+			# for a given URL rule
+			# :ex:
+			#	@url('app','/ )
+			#	@views('index.html')
+			#	def index():
+			#		return
+			def decorator(f):
+				if 'endpoint' not in options:
+					options['endpoint'] = f.__name__
+				self.url_map.add(Rule(rule, **options))
+				self.view_functons[options['endpoint']] = f
+				return f
+			return decorator
+
+		def match_request(self):
+			# match the current(active) URL according to the URL Map,
+			# and stores the endpoint and view arguments on the request obj,
+			# else:
+			# 	the exception is stored
+			rv = _request_ctx_stack.top.url_adapter.match()
+			request.endpoint, request.view_args = rv
+			return rv
+
+		def dispatch_request(self):
+			# When a request happend, matchs the URL and
+			# returns the return value of view
+			# dispatch the URL to the viewfunction and
+			# also pass http code and info
+			try:
+				endpoint, values = self.match_request()
+				return self.view_functons[endpoint](**values)
+			except HTTPException, e:
+				# still not handle error
+				return e
+			except Exception, e:
+				return e
 
 
 # context locals
