@@ -13,11 +13,17 @@
 # models import
 # basic models
 from basedir import _basedir
+import os
+import sys
+import pkg_resources
+from threading import local
 
 # werkzeug
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
 from werkzeug import LocalStack, LocalProxy
+from werkzeug.exceptions import HTTPException
+from werkzeug.contrib.securecookie import SecureCookie
 
 # jinja
 from jinja2 import Environment, PackageLoader
@@ -36,6 +42,9 @@ except ImportError:
 		pass
 
 # models not used in this file but are exported as public interface
+from werkzeug import abort, redirect, secure_filename, cached_property,\
+		html, import_string, generate_password_hash, check_password_hash
+from jinja2 import Markup, escape
 
 
 class MuxiRequest(Request):
@@ -143,7 +152,7 @@ def views(template):
 	:decorator views:
 	:ex:
 		@views("muxi.html")
-		@app.route("/muxi")
+		@app.url("/muxi")
 		def muxi(name):
 			name = "muxi"
 			return {name:name}
@@ -217,120 +226,127 @@ class Muxi(object):
 				**self.jinja_options)
 
 		self.jinja_env.globals.update(
-				url_for = url_for,
+				## url_for = url_for,
 				request = request,
 				session = session,
 				g = g,
 				get_show_msg = get_show_msg
 				)
 
-		def create_jinja_loader(self):
-			# create jinja loader
-			# which can auto find templates floder
-			return PackageLoader(self.package_name)
+	def create_jinja_loader(self):
+		# create jinja loader
+		# which can auto find templates floder
+		return PackageLoader(self.package_name)
 
-		def run(self,	host="muxihost", port=304, **options):
-			# run muxi application~:root URL:~http://muxihost:304
-			from werkzeug import run_simple
-			if 'debug' in options:
-				self.debug = options.pop('debug')
-			if self.static_path is not None:
-				options['static_files'] = {
-						self.static_path:(self.package_name, 'static')
-						}
-			options.setdefault('use_reloader', self.debug)
-			options.setdefault('use_debugger', self.debug)
-			return run_simple(host, port, self, **options)
+	def run(self, host="localhost", port=3044, **options):
+		# run muxi application~:root URL:~http://muxihost:304
+		from werkzeug import run_simple
+		if 'debug' in options:
+			self.debug = options.pop('debug')
+		if self.static_path is not None:
+			options['static_files'] = {
+					self.static_path:(self.package_name, 'static')
+					}
+		options.setdefault('use_reloader', self.debug)
+		options.setdefault('use_debugger', self.debug)
+		return run_simple(host, port, self, **options)
 
-		@staticmethod
-		def url(rule, **options):
-			# @url:
-			# a decorator that is used to register a view function
-			# for a given URL rule
-			# :ex:
-			#	@url('app','/ )
-			#	@views('index.html')
-			#	def index():
-			#		return
-			def decorator(f):
-				if 'endpoint' not in options:
-					options['endpoint'] = f.__name__
-				self.url_map.add(Rule(rule, **options))
-				self.view_functons[options['endpoint']] = f
-				return f
-			return decorator
+	def open_session(self, resource):
+		# creates or opens a new session
+		key = self.secret_key
+		if key is not None:
+			return SecureCookie.load_cookie(request, self.session_cookie_name,
+					secret_key=key)
 
-		def request_init(self, f):
-			# registers a function to run before each request
-			self.request_init_funcs.append(f)
+	# @staticmethod
+	def url(self, rule, **options):
+		# @url:
+		# a decorator that is used to register a view function
+		# for a given URL rule
+		# :ex:
+		#	@url('app','/ )
+		#	@views('index.html')
+		#	def index():
+		#		return
+		def decorator(f):
+			if 'endpoint' not in options:
+				options['endpoint'] = f.__name__
+			self.url_map.add(Rule(rule, **options))
+			self.view_functions[options['endpoint']] = f
 			return f
+		return decorator
 
-		def preprocess_request(self):
-			for func in self.request_init_funcs:
-				rv = func()
-				if rv is not None:
-					return rv
+	def request_init(self, f):
+		# registers a function to run before each request
+		self.request_init_funcs.append(f)
+		return f
 
-		def match_request(self):
-			# match the current(active) URL according to the URL Map,
-			# and stores the endpoint and view arguments on the request obj,
-			# else:
-			# 	the exception is stored
-			rv = _request_ctx_stack.top.url_adapter.match()
-			request.endpoint, request.view_args = rv
-			return rv
-
-		def dispatch_request(self):
-			# When a request happend, matchs the URL and
-			# returns the return value of view
-			# dispatch the URL to the viewfunction and
-			# also pass http code and info
-			try:
-				endpoint, values = self.match_request()
-				return self.view_functons[endpoint](**values)
-			except HTTPException, e:
-				# still not handle error
-				return e
-			except Exception, e:
-				return e
-
-		def make_response(self, rv):
-			# turn a view function's rv(return~value) to
-			# a true response object
-			if isinstance(rv, self.response_class):
+	def preprocess_request(self):
+		for func in self.request_init_funcs:
+			rv = func()
+			if rv is not None:
 				return rv
-			if isinstance(rv, basestring):
-				return self.response_class(rv)
-			if isinstance(rv, tuple):
-				return self.response_class(*rv)
-			return self.response_class.force_type(rv, request.environ)
 
-		def process_response(self, response):
-			# not need now
-			return response
+	def match_request(self):
+		# match the current(active) URL according to the URL Map,
+		# and stores the endpoint and view arguments on the request obj,
+		# else:
+		# 	the exception is stored
+		rv = _request_ctx_stack.top.url_adapter.match()
+		request.endpoint, request.view_args = rv
+		return rv
 
-		def wsgi_app(self, environ, start_response):
-			"""
-			muxi is a WSGI application
-			more detail on {WSGI}
-			[https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface]
-			"""
-			_request_ctx_stack.push(_RequestContext(self, environ))
-			try:
-				rv = self.preprocess_request()
-				if rv is None:
-					# so: rv is a func return value which
-					# run before request
-					rv = self.dispatch_request()
-				response = self.make_response(rv)
-				response = self.process_response(response)
-				return response(environ, start_response)
-			finally:
-				_request_ctx_stack.pop()
+	def dispatch_request(self):
+		# When a request happend, matchs the URL and
+		# returns the return value of view
+		# dispatch the URL to the viewfunction and
+		# also pass http code and info
+		try:
+			endpoint, values = self.match_request()
+			return self.view_functons[endpoint](**values)
+		except HTTPException, e:
+			# still not handle error
+			return e
+		except Exception, e:
+			return e
 
-		def __call__(self, environ, start_response):
-			# call for `wsgi_app`
-			return self.wsgi_app(environ, start_response)
+	def make_response(self, rv):
+		# turn a view function's rv(return~value) to
+		# a true response object
+		if isinstance(rv, self.response_class):
+			return rv
+		if isinstance(rv, basestring):
+			return self.response_class(rv)
+		if isinstance(rv, tuple):
+			return self.response_class(*rv)
+		return self.response_class.force_type(rv, request.environ)
+
+	def process_response(self, response):
+		# not need now
+		return response
+
+	def wsgi_app(self, environ, start_response):
+		"""
+		muxi is a WSGI application
+		more detail on {WSGI}
+		[https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface]
+		"""
+		_request_ctx_stack.push(_RequestContext(self, environ))
+		try:
+			rv = self.preprocess_request()
+			if rv is None:
+				# so: rv is a func return value which
+				# run before request
+				rv = self.dispatch_request()
+			response = self.make_response(rv)
+			# response = self.process_response(response)
+			return response(environ, start_response)
+		finally:
+			_request_ctx_stack.pop()
+
+	def __call__(self, environ, start_response):
+		# call for `wsgi_app`
+		return self.wsgi_app(environ, start_response)
 
 
 # context locals
