@@ -31,6 +31,10 @@ this muxi app running on http://127.0.0.1:3044/muxi
 
 #### very easy but powerful !
 
+## Debug Mode
+
+	DebugToolbar
+
 ## Font-end Template
 muxi use jinja2 as font-end template <br/>
 you can use ~@views~ to add jinja template in your Response, and <br/>

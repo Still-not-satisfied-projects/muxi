@@ -23,6 +23,7 @@ from werkzeug.routing import Map, Rule
 from werkzeug import LocalStack, LocalProxy
 from werkzeug.exceptions import HTTPException
 from werkzeug.contrib.securecookie import SecureCookie
+from werkzeug.test import create_environ
 
 # jinja
 from jinja2 import Environment, PackageLoader
@@ -160,6 +161,24 @@ def views(template):
 			return current_app.jinja_env.get_template(template).render(context)
 
 
+def url(app, rule, **options):
+		# @url:
+		# a decorator that is used to register a view function
+		# for a given URL rule
+		# :ex:
+		#	@url(app,'/ )
+		#	@views('index.html')
+		#	def index():
+		#		return
+		def decorator(f):
+			if 'endpoint' not in options:
+				options['endpoint'] = f.__name__
+			app.url_map.add(Rule(rule, **options))
+			app.view_functions[options['endpoint']] = f
+			return f
+		return decorator
+
+
 class Muxi(object):
 	"""
 	The :class~Muxi: obj implements a WSGI application and
@@ -224,7 +243,7 @@ class Muxi(object):
 
 		self.jinja_env.globals.update(
 				## url_for = url_for,
-				request = request,
+				# request = request,
 				session = session,
 				g = g,
 				get_show_msg = get_show_msg
@@ -261,22 +280,22 @@ class Muxi(object):
 					secret_key=key)
 
 	# @staticmethod
-	def url(self, rule, **options):
-		# @url:
-		# a decorator that is used to register a view function
-		# for a given URL rule
-		# :ex:
-		#	@url('app','/ )
-		#	@views('index.html')
-		#	def index():
-		#		return
-		def decorator(f):
-			if 'endpoint' not in options:
-				options['endpoint'] = f.__name__
-			self.url_map.add(Rule(rule, **options))
-			self.view_functions[options['endpoint']] = f
-			return f
-		return decorator
+	# def url(self, rule, **options):
+	# 	# @url:
+	# 	# a decorator that is used to register a view function
+	# 	# for a given URL rule
+	# 	# :ex:
+	# 	#	@url('app','/ )
+	# 	#	@views('index.html')
+	# 	#	def index():
+	# 	#		return
+	# 	def decorator(f):
+	# 		if 'endpoint' not in options:
+	# 			options['endpoint'] = f.__name__
+	# 		self.url_map.add(Rule(rule, **options))
+	# 		self.view_functions[options['endpoint']] = f
+	# 		return f
+	# 	return decorator
 
 	def request_init(self, f):
 		# registers a function to run before each request
@@ -351,6 +370,7 @@ class Muxi(object):
 	def __call__(self, environ, start_response):
 		# call for `wsgi_app`
 		return self.wsgi_app(environ, start_response)
+
 
 # context locals
 # make the ~global~ctx proxy the local~but~active ctx
