@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 	test_muxi_app.py
 	~~~~~~~~~~~~~~~~
@@ -8,15 +7,18 @@
 """
 
 from muxi import Muxi
+from muxi import Response
 
 
-app = Muxi(__name__)
+app = Muxi('test_muxi_app')
 app.secret_key = "I love muxi"
 
 
 @app.url('/muxi')
 def muxi():
-	return "<h1>hello muxi</h1>"
+	return Response(
+			"<h1>Hello Muxi!</h1>"
+			)
 
 
 if __name__ == "__main__":

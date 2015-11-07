@@ -1,13 +1,7 @@
 木Muxi犀
 ===
 
-	a python web framework baseon werkzeug~jinja~mana
-	yes, it's on the top of flask
-
-## On top of flask
-
-	(or Why we need muxi)
-You can see my~blog~post -> [on top of flask](http://neo1218.github.io/2015/11/06/on-top-of-flask/)
+	a python web framework
 
 ### ==========================================================================
 ## GET Muxi

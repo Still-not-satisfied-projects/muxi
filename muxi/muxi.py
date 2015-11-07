@@ -3,8 +3,7 @@
 	木muxi犀
 	~~~~~~~~
 
-		a python web framework ~ on top of flask
-		baseon werkzeug ~ jinja ~ mana
+		a python web framework
 
 		:copyright: (c) 2015 by neo1218(朱承浩)
 		:license: MIT, see LICENSE for more details.
@@ -27,8 +26,6 @@ from werkzeug.contrib.securecookie import SecureCookie
 
 # jinja
 from jinja2 import Environment, PackageLoader
-
-# mana
 
 # try to import the json helpers
 # simplejson is more efficient than json, so
@@ -251,6 +248,11 @@ class Muxi(object):
 		options.setdefault('use_debugger', self.debug)
 		return run_simple(host, port, self, **options)
 
+	def open_resource(self, resource):
+		# open a resource from app's resource floder
+		# return a readable file-like object for specified resource
+		return pkg_resources.resource_stream(self.package_name, resource)
+
 	def open_session(self, resource):
 		# creates or opens a new session
 		key = self.secret_key
@@ -330,6 +332,8 @@ class Muxi(object):
 		muxi is a WSGI application
 		more detail on {WSGI}
 		[https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface]
+
+		so: this is wsgi on web framework part
 		"""
 		_request_ctx_stack.push(_RequestContext(self, environ))
 		try:
@@ -347,7 +351,6 @@ class Muxi(object):
 	def __call__(self, environ, start_response):
 		# call for `wsgi_app`
 		return self.wsgi_app(environ, start_response)
-
 
 # context locals
 # make the ~global~ctx proxy the local~but~active ctx
