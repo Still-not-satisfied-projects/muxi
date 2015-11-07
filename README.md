@@ -9,6 +9,7 @@
 	(or Why we need muxi)
 You can see my~blog~post -> [on top of flask](http://neo1218.github.io/2015/11/06/on-top-of-flask/)
 
+### ==========================================================================
 ## GET Muxi
 
 	pip install muxi
@@ -33,6 +34,7 @@ now, you can run your muxi app
 	$ python manage.py run
 
 this muxi app running on http://127.0.0.1:304/muxi
+### ==========================================================================
 
 #### very easy but powerful !
 
@@ -79,16 +81,20 @@ teardown database
 
 	and the database would be automatically teardown when sth oops...
 
+## Form System
+
+## Admin Site
+
+## Rest API
+
+## NoSql DataBase
+
 ## Manage Muxi Project
 muxi use manage.py script to manage your muxi project, you can see:<br/>
 we can use manage to run your project and create & update your database and<br/>
 get into shell, and deploy your project
 
 	you can also config the ~manage.py~ script file by yourself :)
-
-## Rest API
-
-## NoSql DataBase
 
 ### :About Name:
 
