@@ -23,7 +23,6 @@ init will automatically create muxi application :) <br/>
 and Then, open app/views.py, and write views(sth you want to response)
 
 	from . import app
-	from muxi import Response
 
 	@url(app, '/muxi')
 	def muxi():
@@ -33,7 +32,7 @@ now, you can run your muxi app
 
 	$ python manage.py run
 
-this muxi app running on http://127.0.0.1:304/muxi
+this muxi app running on http://127.0.0.1:3044/muxi
 ### ==================================================
 
 #### very easy but powerful !
