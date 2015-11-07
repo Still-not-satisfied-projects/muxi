@@ -7,43 +7,40 @@
 ## On top of flask
 
 	(or Why we need muxi)
-You can see my~blog~post -> [on top of flask]()
+You can see my~blog~post -> [on top of flask](http://neo1218.github.io/2015/11/06/on-top-of-flask/)
 
 ## GET Muxi
 
 	pip install muxi
 
-## First Muxi App
-at First, you need to go to terminal, and use mana to init muxi project!
+## First Muxi Project
+at First, you need to go to terminal, and init your muxi project!
 
-	$ mana init MuxiExample
+	$ muxi init MuxiExample
 
-Then, open app/__init__.py, create your muxi application
-
-	from muxi import Muxi
-
-	app = Muxi(__name__)
-
-	from . import views
-
-What's more, open app/views.py, and write views
+init will automatically create muxi application :) <br/>
+and Then, open app/views.py, and write views(sth you want to response)
 
 	from . import app
+	from muxi import Response
 
 	@url(app, '/muxi')
 	def muxi():
-		return "<h1>I like muxi :) </h1>"
+		return "<h1>Hello Muxi</h1>"
 
 now, you can run your muxi app
 
-	$ mana manage MuxiExample
-	$ python manage.py runserver
+	$ python manage.py run
 
 this muxi app running on http://127.0.0.1:304/muxi
 
-## font-end template
-muxi use jinja as font-end template <br/>
-you can write your views functions in app/views.py
+#### very easy but powerful !
+
+## Font-end Template
+muxi use jinja2 as font-end template <br/>
+you can use ~@views~ to add jinja template in your Response, and <br/>
+use dict to push sth into jinja
+
 
 	from . import app
 
@@ -53,10 +50,9 @@ you can write your views functions in app/views.py
 		name = "neo1218"
 		return {name = name}
 
-
 ## SQL ORM
 muxi use sqlalchemy as SQL ORM. <br/>
-what you need todo is create 'models.py' and coding
+what you need todo is create 'app/models.py' and coding
 
 	from muxi import db
 
@@ -83,6 +79,16 @@ teardown database
 
 	and the database would be automatically teardown when sth oops...
 
+## Manage Muxi Project
+muxi use manage.py script to manage your muxi project, you can see:<br/>
+we can use manage to run your project and create & update your database and<br/>
+get into shell, and deploy your project
+
+	you can also config the ~manage.py~ script file by yourself :)
+
+## Rest API
+
+## NoSql DataBase
 
 ### :About Name:
 
