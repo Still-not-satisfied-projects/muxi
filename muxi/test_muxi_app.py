@@ -6,7 +6,7 @@
 		test create muxi app
 """
 
-from muxi import Muxi, url, _RequestContext
+from muxi import Muxi, _RequestContext, url
 from werkzeug.test import create_environ
 from werkzeug import LocalStack
 
@@ -32,7 +32,7 @@ app = Muxi('test_muxi_app')
 
 @url(app, '/muxi')
 def muxi():
-	return "<h1>Hello Muxi!</h1>"
+	return "<h1>Hello neo1218!</h1>"
 
 
 if __name__ == "__main__":

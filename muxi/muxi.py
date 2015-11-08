@@ -91,7 +91,7 @@ class _RequestContext(object):
 		self.app = app
 		self.url_adapter = app.url_map.bind_to_environ(environ)
 		self.request = app.request_class(environ)
-		self.session = app.open_session(self.request)
+		# self.session = app.open_session(self.request)
 		# g is in request ctx
 		# and used to store anything
 		self.g = _RequestGlobals()
@@ -173,21 +173,23 @@ def views(template):
 
 
 def url(app, rule, **options):
-		# @url:
-		# a decorator that is used to register a view function
-		# for a given URL rule
-		# :ex:
-		#	@url(app,'/ )
-		#	@views('index.html')
-		#	def index():
-		#		return
-		def decorator(f):
-			if 'endpoint' not in options:
-				options['endpoint'] = f.__name__
-			app.url_map.add(Rule(rule, **options))
-			app.view_functions[options['endpoint']] = f
-			return f
-		return decorator
+	"""
+	@url:
+	a decorator that is used to register a view function
+	for a given URL rule
+	:ex:
+		@url(app,'/ )
+		@views('index.html')
+		def index():
+			return
+	"""
+	def decorator(f):
+		if 'endpoint' not in options:
+			options['endpoint'] = f.__name__
+		app.url_map.add(Rule(rule, **options))
+		app.view_functions[options['endpoint']] = f
+		return f
+	return decorator
 
 
 class ActiveRequestContext(object):
@@ -299,15 +301,22 @@ class Muxi(object):
 		# return a readable file-like object for specified resource
 		return pkg_resources.resource_stream(self.package_name, resource)
 
-	def open_session(self, resource):
-		# creates or opens a new session
-		key = self.secret_key
-		if key is not None:
-			return SecureCookie.load_cookie(
-					request,
-					self.session_cookie_name,
-					secret_key=key
-					)
+	# def open_session(self, resource):
+	# 	# creates or opens a new session
+	#  	key = self.secret_key
+	#  	if key is not None:
+	#  		return SecureCookie.load_cookie(
+	#  				request,
+	#  				self.session_cookie_name,
+	#  				secret_key=key
+	#  				)
+
+
+	#def save_session(self, session, response):
+	#	"""Saves the session if it needs updates."""
+    #    if session is not None:
+	#		session.save_cookie(response, self.session_cookie_name)
+
 
 	def request_init(self, f):
 		# registers a function to run before each request
@@ -336,7 +345,7 @@ class Muxi(object):
 		# also pass http code and info
 		try:
 			endpoint, values = self.match_request()
-			return self.view_functons[endpoint](**values)
+			return self.view_functions[endpoint](**values)
 		except HTTPException, e:
 			# still not handle error
 			return e
@@ -349,9 +358,9 @@ class Muxi(object):
 		if isinstance(rv, self.response_class):
 			return rv
 		if isinstance(rv, basestring):
-			return self.response_class(rv)
+		 	return self.response_class(rv)
 		if isinstance(rv, tuple):
-			return self.response_class(*rv)
+		 	return self.response_class(*rv)
 		return self.response_class.force_type(rv, request.environ)
 
 	def process_response(self, response):
