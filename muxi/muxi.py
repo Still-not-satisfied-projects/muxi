@@ -109,10 +109,10 @@ def gen_url(endpoint, **values):
 
 	  :URL build ex:
 	  m = Map([
-		  Rule('/', endpoint='index'),
-		Rule('/downloads/', endpoint='downloads/index'),
-		Rule('/downloads/<int:id>', endpoint='downloads/show')
-	  ])
+			Rule('/', endpoint='index'),
+		    Rule('/downloads/', endpoint='downloads/index'),
+		    Rule('/downloads/<int:id>', endpoint='downloads/show')
+		    ])
 
 	  urls = m.bind("ex.com", "/")  # urls is :class~MapAdapter: obj
 
@@ -190,6 +190,22 @@ def url(app, rule, **options):
 		return decorator
 
 
+class ActiveRequestContext(object):
+	"""
+	a context manage class:
+	~_request_ctx_stack~ store the active request context
+	"""
+	def __init__(self, app, environ):
+		self.app = app
+		self.environ = environ
+
+	def __enter__(self):
+		_request_ctx_stack.push(_RequestContext(self.app, self.environ))
+
+	def __exit__(self, *unused):
+		_request_ctx_stack.pop()
+
+
 class Muxi(object):
 	"""
 	The :class~Muxi: obj implements a WSGI application and
@@ -220,7 +236,7 @@ class Muxi(object):
 	#	..--> os.urandom(24)
 	#	'YkB\xe4\x11\xef\xa0\xe4\x9e\x8cZ\xb2}^>T\x12a\x96\x90\xcc\xfd;b'
 	# and it is better to set secret_key into environment variable
-	secret_key = None
+	secret_key = "I love muxistudio"
 
 	session_cookie_name = 'session'
 
@@ -287,26 +303,11 @@ class Muxi(object):
 		# creates or opens a new session
 		key = self.secret_key
 		if key is not None:
-			return SecureCookie.load_cookie(request, self.session_cookie_name,
-					secret_key=key)
-
-	# @staticmethod
-	# def url(self, rule, **options):
-	# 	# @url:
-	# 	# a decorator that is used to register a view function
-	# 	# for a given URL rule
-	# 	# :ex:
-	# 	#	@url('app','/ )
-	# 	#	@views('index.html')
-	# 	#	def index():
-	# 	#		return
-	# 	def decorator(f):
-	# 		if 'endpoint' not in options:
-	# 			options['endpoint'] = f.__name__
-	# 		self.url_map.add(Rule(rule, **options))
-	# 		self.view_functions[options['endpoint']] = f
-	# 		return f
-	# 	return decorator
+			return SecureCookie.load_cookie(
+					request,
+					self.session_cookie_name,
+					secret_key=key
+					)
 
 	def request_init(self, f):
 		# registers a function to run before each request
@@ -330,7 +331,7 @@ class Muxi(object):
 
 	def dispatch_request(self):
 		# When a request happend, matchs the URL and
-		# returns the return value of view
+		# returns the return value of view function
 		# dispatch the URL to the viewfunction and
 		# also pass http code and info
 		try:
@@ -365,8 +366,8 @@ class Muxi(object):
 
 		so: this is wsgi on web framework part
 		"""
-		_request_ctx_stack.push(_RequestContext(self, environ))
-		try:
+		# with _request_ctx_stack.push(_RequestContext(self, environ)):
+		with ActiveRequestContext(self, environ):
 			rv = self.preprocess_request()
 			if rv is None:
 				# so: rv is a func return value which
@@ -375,8 +376,6 @@ class Muxi(object):
 			response = self.make_response(rv)
 			# response = self.process_response(response)
 			return response(environ, start_response)
-		finally:
-			_request_ctx_stack.pop()
 
 	def __call__(self, environ, start_response):
 		# call for `wsgi_app`
@@ -384,3 +383,4 @@ class Muxi(object):
 
 
 # hope to work ...
+# still not to work, WTF

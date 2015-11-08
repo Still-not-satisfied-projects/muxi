@@ -86,6 +86,8 @@ teardown database
 
 ## NoSql DataBase
 
+## Isolate App
+
 ## Manage Muxi Project
 muxi use manage.py script to manage your muxi project, you can see:<br/>
 we can use manage to run your project and create & update your database and<br/>

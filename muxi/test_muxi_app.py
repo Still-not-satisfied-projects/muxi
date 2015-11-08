@@ -16,7 +16,7 @@ from werkzeug import LocalStack
 
 
 app = Muxi('test_muxi_app')
-app.secret_key = "I love muxi"
+# app.secret_key = "I love muxi"
 
 
 # req_ctx = _RequestContext(app, environ)
