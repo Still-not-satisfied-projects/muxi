@@ -12,22 +12,22 @@ from werkzeug import LocalStack
 
 
 # create wsgi
-environ = create_environ()
+# environ = create_environ()
 
 
 app = Muxi('test_muxi_app')
 app.secret_key = "I love muxi"
 
 
-req_ctx = _RequestContext(app, environ)
-_request_ctx_stack = LocalStack()
+# req_ctx = _RequestContext(app, environ)
+# _request_ctx_stack = LocalStack()
 
 
-_request_ctx_stack.push(req_ctx)
+# _request_ctx_stack.push(req_ctx)
 
 
 # global request
-request = _request_ctx_stack.top.request
+# request = _request_ctx_stack.top.request
 
 
 @url(app, '/muxi')
