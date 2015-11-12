@@ -27,7 +27,7 @@ now, you can run your muxi app
 	$ python manage.py run
 
 this muxi app running on http://127.0.0.1:3044/muxi
-</hr>
+<hr>
 
 #### very easy but powerful !
 
