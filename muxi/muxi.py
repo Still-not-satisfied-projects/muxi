@@ -50,7 +50,7 @@ from jinja2 import Markup, escape
 _request_ctx_stack = LocalStack()							 #|
 current_app = LocalProxy(lambda: _request_ctx_stack.top.app) #|
 request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
-session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
+# session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
 g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # I love MuxiStudio
@@ -91,7 +91,7 @@ class _RequestContext(object):
 		self.app = app
 		self.url_adapter = app.url_map.bind_to_environ(environ)
 		self.request = app.request_class(environ)
-		# self.session = app.open_session(self.request)
+		self.session = app.open_session(self.request)
 		# g is in request ctx
 		# and used to store anything
 		self.g = _RequestGlobals()
@@ -218,6 +218,7 @@ class Muxi(object):
 
 		from muxi import Muxi
 		app = Muxi(__name__)
+		app.secret_key = "I love muxi"
 
 	and app is ~WSGI~application
 	"""
@@ -241,7 +242,7 @@ class Muxi(object):
 	#	..--> os.urandom(24)
 	#	'YkB\xe4\x11\xef\xa0\xe4\x9e\x8cZ\xb2}^>T\x12a\x96\x90\xcc\xfd;b'
 	# and it is better to set secret_key into environment variable
-	secret_key = "I love muxistudio"
+	secret_key = None
 
 	session_cookie_name = 'session'
 
@@ -274,9 +275,10 @@ class Muxi(object):
 				**self.jinja_options)
 
 		self.jinja_env.globals.update(
-				## url_for = url_for,
-				# request = request,
-				# session = session,
+				# jinja_env globals
+				gen_url = gen_url,
+				request = request,
+		        session = session,
 				g = g,
 				get_show_msg = get_show_msg
 				)
@@ -304,21 +306,21 @@ class Muxi(object):
 		# return a readable file-like object for specified resource
 		return pkg_resources.resource_stream(self.package_name, resource)
 
-	# def open_session(self, resource):
-	# 	# creates or opens a new session
-	#  	key = self.secret_key
-	#  	if key is not None:
-	#  		return SecureCookie.load_cookie(
-	#  				request,
-	#  				self.session_cookie_name,
-	#  				secret_key=key
-	#  				)
+	def open_session(self, resource):
+		# creates or opens a new session
+	 	key = self.secret_key
+	 	if key is not None:
+	 		return SecureCookie.load_cookie(
+	 				request,
+	 				self.session_cookie_name,
+	 				secret_key=key
+	 				)
 
 
-	#def save_session(self, session, response):
-	#	"""Saves the session if it needs updates."""
-    #    if session is not None:
-	#		session.save_cookie(response, self.session_cookie_name)
+	def save_session(self, session, response):
+		"""Saves the session if it needs updates."""
+        if self.session is not None:
+			self.session.save_cookie(response, self.session_cookie_name)
 
 
 	def request_init(self, f):
@@ -378,7 +380,6 @@ class Muxi(object):
 
 		so: this is wsgi on web framework part
 		"""
-		# with _request_ctx_stack.push(_RequestContext(self, environ)):
 		with ActiveRequestContext(self, environ):
 			rv = self.preprocess_request()
 			if rv is None:
