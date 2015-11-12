@@ -284,8 +284,7 @@ class Muxi(object):
 				)
 
 	def create_jinja_loader(self):
-		# create jinja loader
-		# which can auto find templates floder
+		# create jinja loader,which can auto find templates floder
 		return PackageLoader(self.package_name)
 
 	def run(self, host="localhost", port=3044, **options):
