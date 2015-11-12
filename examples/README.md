@@ -13,4 +13,4 @@ muxi ~ examples
 	basic muxi command
 
 	~> muxi init muxi_first
-	~> python manage.py run
+	~> python manage.py runserver
