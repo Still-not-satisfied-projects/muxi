@@ -16,11 +16,6 @@ app = Muxi(__name__)
 @url(app, '/muxi')
 @views("muxi.html")
 def muxi():
-	# so: context is just a dict
-	# and when we push sth into the dict
-	# we actually not push the variable
-	# but the string
-	# which means code generation
 	return {'name':"muxi", 'name2':"muxi"}
 
 
