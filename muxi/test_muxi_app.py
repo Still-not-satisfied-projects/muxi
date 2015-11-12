@@ -6,33 +6,22 @@
 		test create muxi app
 """
 
-from muxi import Muxi, _RequestContext, url
-from werkzeug.test import create_environ
-from werkzeug import LocalStack
+from muxi import Muxi, _RequestContext, url, views
+from flask import render_template
 
 
-# create wsgi
-# environ = create_environ()
-
-
-app = Muxi('test_muxi_app')
-# app.secret_key = "I love muxi"
-
-
-# req_ctx = _RequestContext(app, environ)
-# _request_ctx_stack = LocalStack()
-
-
-# _request_ctx_stack.push(req_ctx)
-
-
-# global request
-# request = _request_ctx_stack.top.request
+app = Muxi(__name__)
 
 
 @url(app, '/muxi')
+@views("muxi.html")
 def muxi():
-	return "<h1>Hello neo1218!</h1>"
+	# so: context is just a dict
+	# and when we push sth into the dict
+	# we actually not push the variable
+	# but the string
+	# which means code generation
+	return {'name':"muxi", 'name2':"muxi"}
 
 
 if __name__ == "__main__":

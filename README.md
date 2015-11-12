@@ -1,5 +1,5 @@
-🌼 木Muxi犀🌸 
-===
+ 木Muxi犀
+==
 
 	a python web framework
 
@@ -39,15 +39,22 @@ this muxi app running on http://127.0.0.1:3044/muxi
 muxi use jinja2 as font-end template <br/>
 you can use ~@views~ to add jinja template in your Response, and <br/>
 use dict to push sth into jinja
-
+:app/views.py:
 
 	from . import app
 
+	@url(app, "/muxi")
 	@views("muxi.html")
-	@url(app, "/muxi/name")
-	def muxi(name):
-		name = "neo1218"
-		return {name = name}
+	def muxi():
+		return {"name" = "muxi"}
+
+:app/templates/muxi.html:
+
+	<html>
+		<body>
+		<h1>I love {{ name }} !</h1>
+		</body>
+	</html>
 
 ## SQL ORM
 muxi use sqlalchemy as SQL ORM. <br/>

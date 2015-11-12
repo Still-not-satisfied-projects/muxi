@@ -160,16 +160,17 @@ def views(template):
 	"""
 	:decorator views:
 	:ex:
+		@url(app, "/muxi")
 		@views("muxi.html")
-		@app.url("/muxi")
-		def muxi(name):
-			name = "muxi"
-			return {name:name}
+		def muxi():
+			return {"name":"name"}
 	"""
 	def _views(view_func):
-		def __views(*args, **kwargs):
-			context = view_func(*args, **kwargs)
-			return current_app.jinja_env.get_template(template).render(context)
+		def __views(*args):
+			context = view_func(*args)
+			return current_app.jinja_env.get_template(template).render(**context)
+		return __views
+	return _views
 
 
 def url(app, rule, **options):
@@ -214,8 +215,10 @@ class Muxi(object):
 	automatically config the app & register view functions through
 	the name of the module or package passed.
 	:ex:
+
 		from muxi import Muxi
 		app = Muxi(__name__)
+
 	and app is ~WSGI~application
 	"""
 
@@ -273,7 +276,7 @@ class Muxi(object):
 		self.jinja_env.globals.update(
 				## url_for = url_for,
 				# request = request,
-				session = session,
+				# session = session,
 				g = g,
 				get_show_msg = get_show_msg
 				)
@@ -393,3 +396,4 @@ class Muxi(object):
 
 # hope to work ...
 # still not to work, WTF
+# just i.... yeah, work !!!
