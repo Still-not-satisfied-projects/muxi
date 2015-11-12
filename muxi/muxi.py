@@ -319,7 +319,7 @@ class Muxi(object):
 	def save_session(self, session, response):
 		"""Saves the session if it needs updates."""
         if self.session is not None:
-			self.session.save_cookie(response, self.session_cookie_name)
+		    self.session.save_cookie(response, self.session_cookie_name)
 
 
 	def request_init(self, f):
