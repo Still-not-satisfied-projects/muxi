@@ -5,6 +5,8 @@
     ~~~~~~~~~~
 
 		~muxi~project~generate~command~
+
+		:muxi init project_name:  init muxi project
 """
 
 import click
@@ -64,8 +66,8 @@ def fill_file_r(floder, filename, pre_code):
 
 @click.group()
 def cli():
-    """happy🍺 generate flask project"""
-    pass
+	"""~muxi~cli~: generate muxi project"""
+	pass
 
 
 @click.command()
@@ -87,13 +89,13 @@ def init(project_name, sql, config):
 
     if config:
         os.system("touch %s/config.py" % project_name)
-    os.system("touch %s/README.md %s/requirement.txt %s/manage.py" % (project_name,)*3)
-    os.system("mkdir %s/app/ %s/test/" % (project_name,)*2)
+    os.system("touch %s/README.md %s/requirement.txt %s/manage.py" % ((project_name,)*3))
+    os.system("mkdir %s/app/ %s/test/" % ((project_name,)*2))
 
     if sql:
         os.system("touch %s/app/models.py" % project_name)
-    os.system("touch %s/app/__init__.py %s/app/views.py %s/app/forms.py" % (project_name,)*3)
-    os.system("mkdir %s/app/templates/ %s/app/static/" % (project_name,)*2)
+    os.system("touch %s/app/__init__.py %s/app/views.py %s/app/forms.py" % ((project_name,)*3))
+    os.system("mkdir %s/app/templates/ %s/app/static/" % ((project_name,)*2))
     os.system("cd ..")
 
     # happy coding
@@ -108,12 +110,12 @@ def init(project_name, sql, config):
         fill_file_w(project_name, 'config.py', _config_sql_py)
         fill_file_w(project_name, 'app/models.py', _sql_py)
         # 调用mana命令
-        os.system("mana manage %s" % project_name)
+        os.system("muxi manage %s" % project_name)
     else:
         fill_file_w(project_name, 'app/__init__.py', _init_py)
         fill_file_w(project_name, 'manage.py', _manage_py)
 
-    click.echo("init ... done!🍺 ")
+    click.echo("init muxi project ... done!")
 
 
 @click.command()
@@ -179,7 +181,7 @@ def blue(project_name, blueprint_name, prefix):
     # create blueprint files
     os.system("cd %s/app/%s && touch __init__.py views.py forms.py" % (project_name, blueprint_name))
     # create Blueprint obj:: blueprint
-    fill_file_w(project_name+'/app/'+blueprint_name, '__init__.py', _blueprint_py % make_tuple(blueprint_name, 2))
+    fill_file_w(project_name+'/app/'+blueprint_name, '__init__.py', _blueprint_py %(blueprint_name,)*2)
     # register blueprint
     # blue命令可以注册多个蓝图
     # 为了更灵活的处理蓝图的注册,蓝图注册不预填代码模版

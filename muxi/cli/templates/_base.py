@@ -16,11 +16,10 @@ _init_py ='''# coding: utf-8
 
 """
 
-from flask import Flask
+from muxi import Muxi
 
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "I love mana!"  # you can change it :)
+app = Muxi(__name__)
 
 
 from . import views, forms

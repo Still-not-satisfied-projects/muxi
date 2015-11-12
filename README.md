@@ -24,7 +24,7 @@ and Then, open app/views.py, and write views(sth you want to response)
 
 now, you can run your muxi app
 
-	$ python manage.py run
+	$ python manage.py runserver
 
 this muxi app running on http://127.0.0.1:3044/muxi
 <hr>
