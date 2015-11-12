@@ -3,7 +3,7 @@
 
 	a python web framework
 
-### =====================start=========================
+<hr/>
 ## GET Muxi
 
 	pip install muxi
@@ -27,7 +27,7 @@ now, you can run your muxi app
 	$ python manage.py run
 
 this muxi app running on http://127.0.0.1:3044/muxi
-### =====================detail=========================
+</hr>
 
 #### very easy but powerful !
 
