@@ -4,6 +4,7 @@
 	~~~~~~~~
 
 		a python web framework
+		~simple and powerful~
 
 		:copyright: (c) 2015 by neo1218(朱承浩)
 		:license: MIT, see LICENSE for more details.
@@ -134,7 +135,7 @@ def jsonified(**values):
 	"""return a json response"""
 	return current_app.response_class(
 			dump_json(values),
-			mimetype = "text/html"
+			mimetype = "text/json"
 			)
 
 
@@ -278,6 +279,7 @@ class Muxi(object):
 				# jinja_env globals
 				gen_url = gen_url,
 				request = request,
+				# so we can use session in jinja
 		        session = session,
 				g = g,
 				get_show_msg = get_show_msg
@@ -392,8 +394,3 @@ class Muxi(object):
 	def __call__(self, environ, start_response):
 		# call for `wsgi_app`
 		return self.wsgi_app(environ, start_response)
-
-
-# hope to work ...
-# still not to work, WTF
-# just i.... yeah, work !!!

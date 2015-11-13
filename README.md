@@ -2,6 +2,7 @@
 ==
 
 	a python web framework
+		~simple and powerful~
 
 <hr/>
 ## GET Muxi
@@ -29,11 +30,24 @@ now, you can run your muxi app
 this muxi app running on http://127.0.0.1:3044/muxi
 <hr>
 
-#### very easy but powerful !
+#### simple and  powerful !
 
-## Debug Mode
+## URL
+in muxi, you can use function_name(or endpoint) to build URL
+:ex:
 
-	DebugToolbar
+	@url(app, '/index')
+	def index():
+		return {}
+
+	gen_url("index") --> /index
+	gen_url("index", name="muxi") --> /index?name=muxi
+
+## Redirect
+you can use the :function:redirect: and gen_url to go to the specific url
+
+	redirect(gen_url("index")) -go-to-> /index
+	redirect("/index") -go-to-> /index
 
 ## Font-end Template
 muxi use jinja2 as font-end template <br/>
@@ -55,6 +69,10 @@ use dict to push sth into jinja
 		<h1>I love {{ name }} !</h1>
 		</body>
 	</html>
+
+## Debug Mode
+
+	DebugToolbar
 
 ## SQL ORM
 muxi use sqlalchemy as SQL ORM. <br/>
