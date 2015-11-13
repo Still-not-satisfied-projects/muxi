@@ -50,7 +50,7 @@ from jinja2 import Markup, escape
 _request_ctx_stack = LocalStack()							 #|
 current_app = LocalProxy(lambda: _request_ctx_stack.top.app) #|
 request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
-# session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
+session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
 g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # I love MuxiStudio
@@ -318,8 +318,8 @@ class Muxi(object):
 
 	def save_session(self, session, response):
 		"""Saves the session if it needs updates."""
-                if self.session is not None:
-		        self.session.save_cookie(response, self.session_cookie_name)
+		if session is not None:
+			session.save_cookie(response, self.session_cookie_name)
 
 
 	def request_init(self, f):
