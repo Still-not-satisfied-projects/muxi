@@ -49,6 +49,17 @@ you can use the :function:redirect: and gen_url to go to the specific url
 	redirect(gen_url("index")) -go-to-> /index
 	redirect("/index") -go-to-> /index
 
+## HTTP-Request
+you can use global <code>request</code> to get the WSGI environ
+:ex:
+
+	url: http://127.0.0.1:3044/muxi?name="neo1218"
+
+	request.args.get(name) ==> "neo1218"
+	request.cookies ==> return cookies dict {}
+
+[learn more](#)
+
 ## Font-end Template
 muxi use jinja2 as font-end template <br/>
 you can use ~@views~ to add jinja template in your Response, and <br/>
@@ -70,6 +81,7 @@ use dict to push sth into jinja
 		</body>
 	</html>
 
+[learn more](#)
 ## Debug Mode
 
 	DebugToolbar
