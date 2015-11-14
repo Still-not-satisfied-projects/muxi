@@ -125,6 +125,8 @@ teardown database
 
 ## Isolate App
 
+## Muxi Cli(command)
+
 ## Manage Muxi Project
 muxi use manage.py script to manage your muxi project, you can see:<br/>
 we can use manage to run your project and create & update your database and<br/>
