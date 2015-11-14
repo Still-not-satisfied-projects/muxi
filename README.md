@@ -49,14 +49,23 @@ you can use the :function:redirect: and gen_url to go to the specific url
 	redirect(gen_url("index")) -go-to-> /index
 	redirect("/index") -go-to-> /index
 
-## HTTP-Request
+## HTTP-Request-Session
 you can use global <code>request</code> to get the WSGI environ
 :ex:
+
+	from muxi import request
 
 	url: http://127.0.0.1:3044/muxi?name="neo1218"
 
 	request.args.get(name) ==> "neo1218"
 	request.cookies ==> return cookies dict {}
+
+will, you can also use global <code>session</code> to store sth
+
+	from muxi import session
+
+	session["username"] = "neo1218"
+	session["id"] = 1
 
 [learn more](#)
 

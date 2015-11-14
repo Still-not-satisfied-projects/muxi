@@ -10,30 +10,32 @@
 
 from muxi import session
 from muxi import Muxi
-from muxi import views, url, redirect, gen_url
-
-
-# SECRET_KEY = "I love muxi"
+from muxi import views, url, redirect, gen_url, request
 
 
 app = Muxi(__name__)
-# app.config.from_object(__name__)
-# app.secret_key = "I love muxi"
+app.secret_key = 'I love muxi'
 
 
-# @url(app, "/index")
+@url(app, "/index")
 # @views("index.html")  # name
-# def index():
-# 	session['name'] = "neo1218"
-# 	return {'session':session}
+def index():
+	# app.secret_key = 'I love muxi'
+	session["username"] = "neo1218"
+	return "<h1>Hello %s</h1>" % session['username']
+	# return "%s" % str(request.cookies)
+	# name = request.args.get("name")
+	# return "name = %s" % name
+	# return "en..."
+
+# so, I use session, but this session can not store anything !
 
 
-@url(app, "/muxi/<name>")
-def muxi(name):
-	if name == 'muxi':
-		return redirect(gen_url("muxi", name="neo1218"))
-	else:
-		return "<h1>HELLO %s</h1>" % name
+@url(app, "/muxi")
+# @views("index.html")  # session["username"]
+def muxi():
+	# return {'session':session}
+	return "<h1>Hello %s</h1>" % session.get("username")
 
 
 if __name__ == "__main__":

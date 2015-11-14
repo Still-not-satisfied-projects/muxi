@@ -25,6 +25,8 @@ from werkzeug import LocalStack, LocalProxy
 from werkzeug.exceptions import HTTPException
 from werkzeug.contrib.securecookie import SecureCookie
 from werkzeug.test import create_environ
+from werkzeug.test import create_environ
+environ = create_environ()
 
 # jinja
 from jinja2 import Environment, PackageLoader
@@ -312,9 +314,11 @@ class Muxi(object):
 	 	key = self.secret_key
 	 	if key is not None:
 	 		return SecureCookie.load_cookie(
-	 				request,
-	 				self.session_cookie_name,
-	 				secret_key=key
+					# request,  # so this request is the global request...
+					Request(environ),
+					# request,
+					self.session_cookie_name,
+					secret_key=key
 	 				)
 
 

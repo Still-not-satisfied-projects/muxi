@@ -6,8 +6,17 @@ To Do List
 ## 1. Fix ISSUE #2
 https://github.com/neo1218/muxi/issues/2 <br/>
 
+## 2. Form System
 
-## 2. Sql ORM:(SQLAlchemy)
+	from muxi.form import Form
+	from muxi.form.field import StringField, SubmitField
+	from muxi.form.validators import Required
+
+	class EditForm(Form):
+		username = StringField(validators=[Required()])
+		submit = SubmitField("submit")
+
+## 3. Sql ORM:(SQLAlchemy)
 maybe like:
 
 	from muxi import db
@@ -15,7 +24,7 @@ maybe like:
 	class User(db.Model):
 		coding....
 
-## 3. Manage.py
+## 4. Manage.py
 
 	python manage.py runserver
 
