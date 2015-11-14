@@ -143,6 +143,10 @@ get into shell, and deploy your project
 
 	you can also config the ~manage.py~ script file by yourself :)
 
+### LICENSE::MIT
+
+	see [license](https://github.com/neo1218/muxi/blob/master/LICENSE) for more detail
+
 ### :About Name:
 
 	The original meaning of 木犀(muxi) is {{ a sweet-scented osmanthus }} and
