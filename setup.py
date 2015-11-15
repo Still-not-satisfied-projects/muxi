@@ -14,7 +14,7 @@ from setuptools import setup
 
 setup(
 	name='muxi',
-	version=0.05,
+	version=0.06,
 	url='http://github.com/neo1218/muxi/',
     license='MIT',
     author='neo1218',
@@ -32,7 +32,7 @@ setup(
         'itsdangerous>=0.21',
         'click>=2.0',
 		'mana>=2.6',
-		'wtforms>=2.0'
+		'flask-wtf'
 		# what's more...
     ],
     classifiers=[

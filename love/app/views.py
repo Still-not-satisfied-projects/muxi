@@ -1,12 +1,9 @@
 # coding: utf-8
 
 from . import app
-from muxi import url, views
-from .forms import MuxiForm
+from muxi import url
 
 
-@url(app, "/index")
-@views("index.html")
-def index():
-	form = MuxiForm()
-	return {'form':form}
+@url(app, "/test")
+def test():
+	return "<h1>just for test</h1>"

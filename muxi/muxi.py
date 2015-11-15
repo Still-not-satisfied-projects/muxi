@@ -182,7 +182,7 @@ def url(app, rule, **options):
 	a decorator that is used to register a view function
 	for a given URL rule
 	:ex:
-		@url(app,'/ )
+		@url(app,'/index', methods=["GET"])
 		@views('index.html')
 		def index():
 			return
