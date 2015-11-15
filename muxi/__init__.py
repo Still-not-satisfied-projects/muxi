@@ -4,7 +4,7 @@
 	木muxi犀~
 	~~~~~~~~~~
 
-		this is the API file
+		this is the muxi API file
 """
 
 

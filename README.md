@@ -15,6 +15,15 @@ at First, you need to go to terminal, and init your muxi project!
 	$ muxi init MuxiExample
 
 init will automatically create muxi application :) <br/>
+
+
+                |-app/  -----------| __init__.py
+                |-test/            |
+	MuxiExample-|-manage.py        | views.py
+                |-requirement.txt  | forms.py
+                |-README.md        | templates
+                |                  | static
+
 and Then, open app/views.py, and write views(sth you want to response)
 
 	from . import app
@@ -95,6 +104,22 @@ use dict to push sth into jinja
 
 	DebugToolbar
 
+## Form System
+muxi integrate with WTForms <br/>
+:ex:
+
+	from muxi.form import Form
+	from muxi.form.fields import StringField, SubmitField
+	from muxi.form.validators import Required
+
+	class MuxiForm(Form):
+		body = StringField(validators=[Required()])
+		submit = SubmitField("submit")
+
+and now, you can create a form object in your views function and <br/>
+pass this form to jinja(the html file)
+
+[learn more]()
 ## SQL ORM
 muxi use sqlalchemy as SQL ORM. <br/>
 what you need todo is create 'app/models.py' and coding
@@ -123,8 +148,6 @@ teardown database
 	app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 	and the database would be automatically teardown when sth oops...
-
-## Form System
 
 ## Admin Site
 
