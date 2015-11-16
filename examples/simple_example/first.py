@@ -7,7 +7,6 @@
 """
 
 from muxi import Muxi, _RequestContext, url, views
-from flask import render_template
 
 
 app = Muxi(__name__)
