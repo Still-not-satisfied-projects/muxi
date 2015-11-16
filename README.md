@@ -41,7 +41,21 @@ this muxi app running on http://127.0.0.1:3044/muxi
 
 #### simple and  powerful !
 
-## URL
+## Debug Mode
+
+	DebugToolbar
+
+[learn_more]()
+
+## Muxi Cli(command)
+you can use ~muxi~ cli to create, init, deploy your project and help you register<br/>
+isolate APP. the simplest way to learn muxi cli is the --help option:
+
+	$ muxi --help
+
+[learn_more]()
+
+## URL & Redirect
 in muxi, you can use function_name(or endpoint) to build URL
 :ex:
 
@@ -52,11 +66,12 @@ in muxi, you can use function_name(or endpoint) to build URL
 	gen_url("index") --> /index
 	gen_url("index", name="muxi") --> /index?name=muxi
 
-## Redirect
 you can use the :function:redirect: and gen_url to go to the specific url
 
 	redirect(gen_url("index")) -go-to-> /index
 	redirect("/index") -go-to-> /index
+
+[learn_more]()
 
 ## HTTP-Request-Session
 you can use global <code>request</code> to get the WSGI environ
@@ -78,7 +93,7 @@ will, you can also use global <code>session</code> to store sth
 
 [learn more](#)
 
-## Font-end Template
+## Front-end Template
 muxi use jinja2 as font-end template <br/>
 you can use ~@views~ to add jinja template in your Response, and <br/>
 use dict to push sth into jinja
@@ -99,10 +114,7 @@ use dict to push sth into jinja
 		</body>
 	</html>
 
-[learn more](#)
-## Debug Mode
-
-	DebugToolbar
+[learn more]()
 
 ## Form System
 muxi integrate with WTForms <br/>
@@ -120,6 +132,7 @@ and now, you can create a form object in your views function and <br/>
 pass this form to jinja(the html file)
 
 [learn more]()
+
 ## SQL ORM
 muxi use sqlalchemy as SQL ORM. <br/>
 what you need todo is create 'app/models.py' and coding
@@ -128,6 +141,8 @@ what you need todo is create 'app/models.py' and coding
 
 	class User(db.Model):
 		coding...
+
+[learn_more]()
 
 ## DataBase
 create migration floder to record database migrate
@@ -149,15 +164,11 @@ teardown database
 
 	and the database would be automatically teardown when sth oops...
 
-## Admin Site
-
-## Rest API
+[learn_more]()
 
 ## NoSql DataBase
 
 ## Isolate App
-
-## Muxi Cli(command)
 
 ## Manage Muxi Project
 muxi use manage.py script to manage your muxi project, you can see:<br/>
@@ -165,6 +176,12 @@ we can use manage to run your project and create & update your database and<br/>
 get into shell, and deploy your project
 
 	you can also config the ~manage.py~ script file by yourself :)
+
+[learn_more]()
+
+## Admin Site
+
+## Rest API
 
 ### LICENSE::MIT
 
