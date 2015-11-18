@@ -4,11 +4,26 @@
                               simple & powerful
 
                               ~~> introduce:
-               muxi is a ~simple python web framework~ written by ~python~,
-               based on: 
-               ~werkzeug~: https://github.com/mitsuhiko/werkzeug
-               ~jinja2~: https://github.com/mitsuhiko/jinja2
-               ~mana~: https://github.com/neo1218/mana
-               ~flask-wtf~: https://github.com/lepture/flask-wtf/
-               ~flask-sqlalchemy~: https://github.com/mitsuhiko/flask-sqlalchemy
-                        so: muxi is ~on top of flask~
+            muxi is a ~simple python web framework~ written by ~python~,
+            based on: 
+            ~werkzeug~: https://github.com/mitsuhiko/werkzeug
+            ~jinja2~: https://github.com/mitsuhiko/jinja2
+            ~mana~: https://github.com/neo1218/mana
+            ~flask-wtf~: https://github.com/lepture/flask-wtf/
+            ~flask-sqlalchemy~: https://github.com/mitsuhiko/flask-sqlalchemy
+                      so: muxi is very simple but powerful~
+                        
+                              ~~> principle:
+                             ~on top of flask~
+            we all like ~flask~, because of ~werkzeug & jinja2, but 
+            we must admit, when we use flask to deal with some ~big project~, 
+            it looks very complicated: 
+                  we need to create the project directory manually,
+                  import and init some certain extensions(
+                      flask-wtf,
+                      flask-sqlalchemy,
+                      ......
+                      )
+                  and use flask-admin to create admin site,
+                                   ......
+                       ~it is not a good experience~
