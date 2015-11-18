@@ -9,22 +9,49 @@
             ~werkzeug~: https://github.com/mitsuhiko/werkzeug
             ~jinja2~: https://github.com/mitsuhiko/jinja2
             ~mana~: https://github.com/neo1218/mana
-            ~flask-wtf~: https://github.com/lepture/flask-wtf/
-            ~flask-sqlalchemy~: https://github.com/mitsuhiko/flask-sqlalchemy
-                      so: muxi is very simple but powerful~
-                        
-                        
+                      ~some certain flask extensions~
+
+ 
                               ~~> principle:
                              ~on top of flask~
-            we all like ~flask~, because of ~werkzeug & jinja2, but 
+            we all like ~flask~, because of ~werkzeug & jinja2~, but 
             we must admit, when we use flask to deal with some ~big project~, 
             it looks very complicated: 
                   we need to create the project directory manually,
                   import and init some certain extensions(
-                      flask-wtf,
-                      flask-sqlalchemy,
-                      ......
-                      )
+                      flask-wtf, flask-sqlalchemy,
+                      flask-admin,  ......
+                      ),
+                  create and register a blueprint by hand,
                   and use flask-admin to create admin site,
                                    ......
+                                  I think
                        ~it is not a good experience~
+
+
+                              ~~>  muxi:
+                            ~  the specific ~
+      muxi has it own ~command system~(see: muxi --help) which based on ~mana~
+      to generate your muxi project. you can use ~muxi command~ to:
+              init(which suport a flexible options), register, 
+                    deploy and manage your project.
+                  
+      muxi use ~sqlalchemy~ as database orm and integrated flask-sqlalchemy to
+      provide a high level api, so, you can just ~from muxi import db~ and coding
+            
+      muxi use ~jinja2~ as front-end template, and use a very flexible way to add
+      jinja templates: the view decorator, which can import from muxi
+
+      well, when you use muxi command to create muxi project, it will automatically
+                          generate ~admin site~
+                          
+                          
+                              ~~> LICENSE:
+                            MIT license is great
+                            
+                            
+                              ~~> About::Name
+      the original meaning of 木犀(muxi) is {{ a sweet-scented osmanthus }} and
+                    used as my :team name ~ MuxiStudio:
+      beacause I love my team, so I chose muxi as this web framework's name
+
