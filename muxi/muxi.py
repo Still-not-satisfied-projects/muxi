@@ -113,9 +113,9 @@ def gen_url(endpoint, **values):
 	  :URL build ex:
 	  m = Map([
 			Rule('/', endpoint='index'),
-		    Rule('/downloads/', endpoint='downloads/index'),
-		    Rule('/downloads/<int:id>', endpoint='downloads/show')
-		    ])
+			Rule('/downloads/', endpoint='downloads/index'),
+			Rule('/downloads/<int:id>', endpoint='downloads/show')
+			])
 
 	  urls = m.bind("ex.com", "/")  # urls is :class~MapAdapter: obj
 
@@ -247,7 +247,9 @@ class Muxi(object):
 	# and it is better to set secret_key into environment variable
 	secret_key = None
 
+
 	session_cookie_name = 'session'
+
 
 	# options that are passed directly to the jinja environment
 	jinja_options = dict(
@@ -255,16 +257,20 @@ class Muxi(object):
 			extensions = ['jinja2.ext.autoescape', 'jinja2.ext.with_']
 			)
 
+
 	def __init__(self, package_name):
 		# app = Muxi(__name__)
 		self.debug = False
 		self.package_name = package_name
+		# endpoint => views func -> dict
 		self.view_functions = {}
+		# error => error handle func -> dict
 		self.error_handlers = {}
 		# the func run before request
 		self.request_init_funcs = []
 		self.request_shutdown_functions = []
 		self.url_map = Map()
+
 
 		if self.static_path is not None:
 			# auto add ~endpoint:static~
@@ -274,25 +280,29 @@ class Muxi(object):
 				endpoint = 'static'
 				))
 
-		self.jinja_env = Environment(loader=self.create_jinja_loader(),
-				**self.jinja_options)
 
-		self.jinja_env.globals.update(
-				# jinja_env globals
-				gen_url = gen_url,
-				request = request,
-				# so we can use session in jinja
-		        session = session,
-				g = g,
-				get_show_msg = get_show_msg
-				)
+			self.jinja_env = Environment(loader=self.create_jinja_loader(),
+					**self.jinja_options)
 
-	def create_jinja_loader(self):
-		# create jinja loader,which can auto find templates floder
+
+			self.jinja_env.globals.update(
+					# jinja_env globals
+					gen_url = gen_url,
+					request = request,
+					# so we can use session in jinja
+					session = session,
+					g = g,
+					get_show_msg = get_show_msg
+					)
+
+
+			def create_jinja_loader(self):
+				"""create jinja loader,which can auto find templates floder"""
 		return PackageLoader(self.package_name)
 
+
 	def run(self, host="localhost", port=3044, **options):
-		# run muxi application~:root URL:~http://muxihost:304
+		"""run muxi application~:root URL:~http://muxihost:304"""
 		from werkzeug import run_simple
 		if 'debug' in options:
 			self.debug = options.pop('debug')
@@ -300,59 +310,71 @@ class Muxi(object):
 			options['static_files'] = {
 					self.static_path:(self.package_name, 'static')
 					}
-		options.setdefault('use_reloader', self.debug)
+			options.setdefault('use_reloader', self.debug)
 		options.setdefault('use_debugger', self.debug)
 		return run_simple(host, port, self, **options)
 
+
 	def open_resource(self, resource):
-		# open a resource from app's resource floder
-		# return a readable file-like object for specified resource
+		"""
+		open a resource from app's resource floder
+		return a readable file-like object for specified resource
+		"""
 		return pkg_resources.resource_stream(self.package_name, resource)
 
+
 	def open_session(self, resource):
-		# creates or opens a new session
-	 	key = self.secret_key
-	 	if key is not None:
-	 		return SecureCookie.load_cookie(
+		"""creates or opens a new session"""
+		key = self.secret_key
+		if key is not None:
+			return SecureCookie.load_cookie(
 					# request,  # so this request is the global request...
 					Request(environ),
 					# request,
 					self.session_cookie_name,
 					secret_key=key
-	 				)
+					)
 
 
-	def save_session(self, session, response):
-		"""Saves the session if it needs updates."""
+			def save_session(self, session, response):
+				"""Saves the session if it needs updates."""
 		if session is not None:
 			session.save_cookie(response, self.session_cookie_name)
 
 
 	def request_init(self, f):
-		# registers a function to run before each request
+		"""registers a function to run before each request"""
 		self.request_init_funcs.append(f)
 		return f
 
+
 	def preprocess_request(self):
+		"""make sure return value is not None"""
 		for func in self.request_init_funcs:
 			rv = func()
 			if rv is not None:
 				return rv
 
+
 	def match_request(self):
-		# match the current(active) URL according to the URL Map,
-		# and stores the endpoint and view arguments on the request obj,
-		# else:
-		# 	the exception is stored
+		"""
+		match the current(active) URL according to the URL Map,
+		and stores the endpoint and view arguments on the request obj,
+		else:
+			the exception is stored
+		"""
 		rv = _request_ctx_stack.top.url_adapter.match()
 		request.endpoint, request.view_args = rv
 		return rv
 
+
 	def dispatch_request(self):
-		# When a request happend, matchs the URL and
-		# returns the return value of view function
-		# dispatch the URL to the viewfunction and
-		# also pass http code and info
+		"""
+		When a request happend, matchs the URL and
+		returns the return value of view function
+		dispatch the URL to the viewfunction and
+		also pass http code and info
+		"""
 		try:
 			endpoint, values = self.match_request()
 			return self.view_functions[endpoint](**values)
@@ -362,20 +384,43 @@ class Muxi(object):
 		except Exception, e:
 			return e
 
+
+	def error_handler(self, code):
+		"""
+		a decorator:
+			give a code and return a message
+		:ex:
+			@app.error_handler
+			def page_not_found():
+				return 'this page is not found', 404
+		"""
+		def decorator(f):
+			self.error_handlers[code] = f
+			return f
+		return decorator
+
+
 	def make_response(self, rv):
-		# turn a view function's rv(return~value) to
-		# a true response object
+		"""
+		turn a view function's rv(return~value) to
+		a true response object
+		"""
 		if isinstance(rv, self.response_class):
 			return rv
 		if isinstance(rv, basestring):
-		 	return self.response_class(rv)
+			return self.response_class(rv)
 		if isinstance(rv, tuple):
-		 	return self.response_class(*rv)
+			return self.response_class(*rv)
 		return self.response_class.force_type(rv, request.environ)
 
+
 	def process_response(self, response):
-		# not need now
+		"""
+		not need now:
+		now I need:
+		"""
 		return response
+
 
 	def wsgi_app(self, environ, start_response):
 		"""
@@ -394,6 +439,7 @@ class Muxi(object):
 			response = self.make_response(rv)
 			# response = self.process_response(response)
 			return response(environ, start_response)
+
 
 	def __call__(self, environ, start_response):
 		# call for `wsgi_app`

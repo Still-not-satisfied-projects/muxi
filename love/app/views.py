@@ -8,5 +8,6 @@ from .forms import MuxiForm
 @url(app, "/test")
 @views("index.html")
 def test():
-	form = MuxiForm()
-	return {'form':form}
+	# form = MuxiForm()
+	# return {'form':form}
+	return {}

@@ -1,8 +1,9 @@
 # coding: utf-8
 """
-
+	love
     ~~~~~~~
 
+		love for test
 """
 
 from muxi import Muxi
