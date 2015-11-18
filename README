@@ -37,13 +37,14 @@
                     deploy and manage your project.
                   
       muxi use ~sqlalchemy~ as database orm and integrated flask-sqlalchemy to
-      provide a high level api, so, you can just ~from muxi import db~ and coding
+      provide a high level api, so, you can just ~from muxi import db~ 
+                              and coding
             
-      muxi use ~jinja2~ as front-end template, and use a very flexible way to add
-      jinja templates: the view decorator, which can import from muxi
+      muxi use ~jinja2~ as front-end template, and use a very flexible way 
+      to add jinja templates: the view decorator, which can import from muxi
 
-      well, when you use muxi command to create muxi project, it will automatically
-                          generate ~admin site~
+      well, when you use muxi command to create muxi project, it will 
+                    automatically generate ~admin site~
                           
                           
                               ~~> LICENSE:
