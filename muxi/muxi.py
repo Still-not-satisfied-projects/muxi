@@ -281,24 +281,24 @@ class Muxi(object):
 				))
 
 
-			self.jinja_env = Environment(loader=self.create_jinja_loader(),
-					**self.jinja_options)
+		self.jinja_env = Environment(loader=self.create_jinja_loader(),
+				**self.jinja_options)
 
 
-			self.jinja_env.globals.update(
-					# jinja_env globals
-					gen_url = gen_url,
-					request = request,
-					# so we can use session in jinja
-					session = session,
-					g = g,
-					get_show_msg = get_show_msg
-					)
+		self.jinja_env.globals.update(
+				# jinja_env globals
+				gen_url = gen_url,
+				request = request,
+				# so we can use session in jinja
+				session = session,
+				g = g,
+				get_show_msg = get_show_msg
+				)
 
 
-			def create_jinja_loader(self):
-				"""create jinja loader,which can auto find templates floder"""
-		return PackageLoader(self.package_name)
+	def create_jinja_loader(self):
+	    """create jinja loader,which can auto find templates floder"""
+	    return PackageLoader(self.package_name)
 
 
 	def run(self, host="localhost", port=3044, **options):
@@ -336,8 +336,8 @@ class Muxi(object):
 					)
 
 
-			def save_session(self, session, response):
-				"""Saves the session if it needs updates."""
+	def save_session(self, session, response):
+		"""Saves the session if it needs updates."""
 		if session is not None:
 			session.save_cookie(response, self.session_cookie_name)
 
