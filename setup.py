@@ -14,7 +14,7 @@ from setuptools import setup
 
 setup(
 	name='muxi',
-	version=0.06,
+	version=0.07,
 	url='http://github.com/neo1218/muxi/',
     license='MIT',
     author='neo1218',
