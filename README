@@ -1,15 +1,15 @@
-                                ~木muxi犀~
+                                	~木muxi犀~
                                 
-                           a python web framework
-                              simple & powerful
+                           	  a python web framework
+                              	    simple & powerful
 
-                              ~~> introduce:
-            muxi is a ~simple python web framework~ written by ~python~,
-            based on: 
-            ~werkzeug~: https://github.com/mitsuhiko/werkzeug
-            ~jinja2~: https://github.com/mitsuhiko/jinja2
-            ~mana~: https://github.com/neo1218/mana
-                      ~some certain flask extensions~
+                              	    ~~> introduce:
+            	muxi is a ~simple python web framework~ written by ~python~,
+            	based on: 
+            	~werkzeug~: https://github.com/mitsuhiko/werkzeug
+            	~jinja2~: https://github.com/mitsuhiko/jinja2
+            	~mana~: https://github.com/neo1218/mana
+                      		~some certain flask extensions~
 
  
                               ~~> principle:
