@@ -33,7 +33,8 @@ from jinja2 import Environment, PackageLoader
 
 # try to import the json helpers
 # simplejson is more efficient than json, so
-# we first want import simplejson, except ImportError...
+# we first want import simplejson, if it meet ImportError
+# than import json
 try:
 	from simplejson import loads as load_json, dumps as dump_json
 except ImportError:
@@ -50,11 +51,11 @@ from jinja2 import Markup, escape
 
 # context locals
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-_request_ctx_stack = LocalStack()							 #|
-current_app = LocalProxy(lambda: _request_ctx_stack.top.app) #|
-request = LocalProxy(lambda: _request_ctx_stack.top.request) #|
-session = LocalProxy(lambda: _request_ctx_stack.top.session) #|
-g = LocalProxy(lambda: _request_ctx_stack.top.g)             #|
+_request_ctx_stack = LocalStack()							  #|
+current_app = LocalProxy(lambda: _request_ctx_stack.top.app)  #|
+request = LocalProxy(lambda: _request_ctx_stack.top.request)  #|
+session = LocalProxy(lambda: _request_ctx_stack.top.session)  #|
+g = LocalProxy(lambda: _request_ctx_stack.top.g)              #|
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # I love MuxiStudio
 
@@ -141,9 +142,9 @@ def jsonified(**values):
 			)
 
 
-	def show(message):
-		"""show a message to the next request"""
-		session['_flashes'] = session.get('_shows', []) + [message]
+def show(message):
+	"""show a message to the next request"""
+	session['_flashes'] = session.get('_shows', []) + [message]
 # well ~
 # :func show: means show, but it actually "push" the message into session
 # and we can use :func get_show_msg: in template to "pop" the message and
@@ -270,6 +271,7 @@ class Muxi(object):
 		self.request_init_funcs = []
 		self.request_shutdown_functions = []
 		self.url_map = Map()
+		self.secret_key = "I love muxi"
 
 
 		if self.static_path is not None:
@@ -297,8 +299,8 @@ class Muxi(object):
 
 
 	def create_jinja_loader(self):
-	    """create jinja loader,which can auto find templates floder"""
-	    return PackageLoader(self.package_name)
+		"""create jinja loader,which can auto find templates floder"""
+		return PackageLoader(self.package_name)
 
 
 	def run(self, host="localhost", port=3044, **options):

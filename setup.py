@@ -14,7 +14,7 @@ from setuptools import setup
 
 setup(
 	name='muxi',
-	version=0.07,
+	version=0.11,
 	url='http://github.com/neo1218/muxi/',
     license='MIT',
     author='neo1218',
@@ -22,7 +22,7 @@ setup(
     description='a python web framework'
                 'simple and powerful',
     long_description=__doc__,
-    packages=['muxi'],  # packages is importent
+    packages=['muxi', 'muxi.cli', 'muxi.form'],  # packages is importent
     include_package_data=True,
     zip_safe=False,
     platforms='any',
@@ -36,7 +36,6 @@ setup(
 		# what's more...
     ],
     classifiers=[
-		'Development Status :: 1 - Beta',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
 		'License :: OSI Approved :: MIT License',

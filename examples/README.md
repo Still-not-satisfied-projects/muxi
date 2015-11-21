@@ -14,3 +14,8 @@ muxi ~ examples
 
 	~> muxi init muxi_first
 	~> python manage.py runserver
+
+## love
+
+	love for use flask-wtf and wtforms
+
