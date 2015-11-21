@@ -17,7 +17,7 @@
                   we all like ~flask~, because of ~werkzeug & jinja2~, but
               we must admit, when we use flask to deal with some ~big project~,
                                  it looks very complicated:
-					{--------------------------------------------------}
+                   {--------------------------------------------------}
                       we need to create the project directory manually,
                       import and init some certain extensions(
 					            flask-wtf, flask-sqlalchemy,
@@ -25,9 +25,9 @@
 							    ),
                       create and register a blueprint by hand,
                       and use flask-admin to create admin site,
-					{---------------------------------------------------}
+                   {---------------------------------------------------}
                                           ......
-										  I think
+                                          I think
                                ~it is not a good experience~~
 
 
@@ -48,8 +48,8 @@
 							automatically generate ~admin site~
 
 
-										LICENSE:
-								  MIT license is great~~
+                                         LICENSE:
+                                  MIT license is great~~
 
 
                                       About::Name
