@@ -20,9 +20,9 @@
                    {--------------------------------------------------}
                       we need to create the project directory manually,
                       import and init some certain extensions(
-					            flask-wtf, flask-sqlalchemy,
-							    flask-admin,  ......
-							    ),
+                                flask-wtf, flask-sqlalchemy,
+                                flask-admin,  ......
+                                ),
                       create and register a blueprint by hand,
                       and use flask-admin to create admin site,
                    {---------------------------------------------------}
@@ -45,7 +45,7 @@
 			to add jinja templates: the view decorator, which can import from muxi
 
                 well, when you use muxi command to create muxi project, it will
-							automatically generate ~admin site~
+                            automatically generate ~admin site~
 
 
                                          LICENSE:
