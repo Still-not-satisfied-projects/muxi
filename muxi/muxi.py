@@ -187,6 +187,8 @@ def url(app, rule, **options):
 		@views('index.html')
 		def index():
 			return
+	we may be notice that we should wrap the views decorator
+	into url decorator, which to protect the request context
 	"""
 	def decorator(f):
 		if 'endpoint' not in options:

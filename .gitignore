@@ -1,5 +1,8 @@
 *.pyc
 **/*.pyc
+
 -1
+
 venv
 Muxi.egg-info
+dist
