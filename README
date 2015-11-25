@@ -33,14 +33,14 @@
                                      ~ the specific ~
           muxi has it own ~command system~(see: muxi --help) which based on ~mana~
           to generate your muxi project. you can use ~muxi command~ to:
-		  init(which suport a flexible options), register,deploy and manage your project.
+          init(which suport a flexible options), register,deploy and manage your project.
 
             muxi use ~sqlalchemy~ as database orm and integrated flask-sqlalchemy to
             provide a high level api, so, you can just ~from muxi import db~
                                         and coding
 
             muxi use ~jinja2~ as front-end template, and use a very flexible way
-			to add jinja templates: the view decorator, which can import from muxi
+            to add jinja templates: the view decorator, which can import from muxi
 
                 well, when you use muxi command to create muxi project, it will
                             automatically generate ~admin site~
