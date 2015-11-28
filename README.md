@@ -1,4 +1,8 @@
-                                       ~木muxi犀~
+MUXI
+===
+![muxi](http://7xj431.com1.z0.glb.clouddn.com/111)
+
+                                        ~木muxi犀~
 
                                   a python web framework
                                      simple & powerful
