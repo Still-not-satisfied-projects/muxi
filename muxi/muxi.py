@@ -332,7 +332,9 @@ class Muxi(object):
 		key = self.secret_key
 		if key is not None:
 			return SecureCookie.load_cookie(
-					# request,  # so this request is the global request...
+					# here, we should use global request
+					# which is a context-local object
+          # request,  # so this request is the global request...
 					Request(environ),
 					# request,
 					self.session_cookie_name,

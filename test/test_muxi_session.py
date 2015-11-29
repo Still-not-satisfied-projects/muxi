@@ -10,7 +10,7 @@
 
 from muxi import session
 from muxi import Muxi
-from muxi import views, url, redirect, gen_url, request
+from muxi import views, url, redirect, request
 
 
 app = Muxi(__name__)
