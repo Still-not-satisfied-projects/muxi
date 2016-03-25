@@ -1,7 +1,7 @@
 # coding: utf-8
 """
-	木muxi犀
-	~~~~~~~~
+    muxi
+	~~~~
 
 		a python web framework
 		~simple and powerful~
