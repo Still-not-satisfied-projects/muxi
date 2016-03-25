@@ -1,4 +1,4 @@
- 木Muxi犀::quick start
+ 木Muxi犀
 ==
 
 	a python web framework
