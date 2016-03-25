@@ -3,11 +3,8 @@
     muxi
 	~~~~
 
-		a python web framework
-		~simple and powerful~
-
-		:copyright: (c) 2015 by neo1218(朱承浩)
-		:license: MIT, see LICENSE for more details.
+        :a decorated python web framework:
+		:copyright: (c) 2016 by neo1218(朱承浩)
 """
 
 # models import
